@@ -5,14 +5,14 @@ import android.widget.GridLayout;
 
 public class Board extends GridLayout {
     private Cell[][] boardMatrix;
-    private int[][] borders = new int[][]{ {0, 0}, {0, 1}, {1, 0}, {1, 1}, {0, 5}, {0, 6}, {1, 5}, {1, 6}, {5, 0}, {5, 1}, {6, 0}, {6, 1}, {5, 5}, {5, 6}, {6, 5}, {6, 6}}; // Coords to avoid checking borders of matrix
+    private int[][] borders = new int[][]{ {0, 0}, {0, 1}, {1, 0}, {1, 1}, {0, 5}, {0, 6}, {1, 5}, {1, 6}, {5, 0}, {5, 1}, {6, 0}, {6, 1}, {5, 5}, {5, 6}, {6, 5}, {6, 6}}; // Cords to avoid checking borders of matrix
     public enum Direction { // Movement directions
-        UP, DOWN, RIGHT, LEFT;
-    };
+        UP, DOWN, RIGHT, LEFT
+    }
 
     public enum Status { // Current status of the board
-        GAMEOVER, WIN, PLAYABLE;
-    };
+        GAMEOVER, WIN, PLAYABLE
+    }
 
     // CONSTRUCTOR
     public Board(Context context) {
@@ -79,10 +79,22 @@ public class Board extends GridLayout {
     // MOVEMENT Methods
     public void handleMovement(Cell selectedCell, Cell targetCell, Direction movementDirection) {
         switch (movementDirection) {
-            case DOWN: {applyMovement(selectedCell, targetCell, selectedCell.getRowPos()+1, selectedCell.getColPos())};
-            case UP: {applyMovement(selectedCell, targetCell, selectedCell.getRowPos()-1, selectedCell.getColPos())};
-            case RIGHT: {applyMovement(selectedCell, targetCell, selectedCell.getRowPos(), selectedCell.getColPos()+1)};
-            case LEFT: {applyMovement(selectedCell, targetCell, selectedCell.getRowPos(), selectedCell.getColPos()-1)};
+            case DOWN:
+                applyMovement(selectedCell, targetCell, selectedCell.getRowPos()+1, selectedCell.getColPos());
+                break;
+            case UP:
+                applyMovement(selectedCell, targetCell, selectedCell.getRowPos()-1, selectedCell.getColPos());
+                break;
+            case RIGHT:
+                applyMovement(selectedCell, targetCell, selectedCell.getRowPos(), selectedCell.getColPos()+1);
+                break;
+            case LEFT:
+                applyMovement(selectedCell, targetCell, selectedCell.getRowPos(), selectedCell.getColPos()-1);
+                break;
+            // If there's a possibility of other cases or a default case, handle them appropriately:
+            default:
+                // Handle any other cases or throw an exception as appropriate.
+                break;
         }
     }
     public void applyMovement(Cell selectedCell, Cell targetCell, int row, int col) {
@@ -101,18 +113,24 @@ public class Board extends GridLayout {
         }
 
         if (colDif == 0) {
-            return switch (rowDif) {
-                case -2: Direction.DOWN;
-                case 2: {Direction.UP};
-                default: {null};
-            };
+            switch (rowDif) {
+                case -2:
+                    return Direction.DOWN;
+                case 2:
+                    return Direction.UP;
+                default:
+                    return null;
+            }
         }
 
-        return switch (colDif) {
-            case -2 -> Direction.RIGHT;
-            case 2 -> Direction.LEFT;
-            default -> null;
-        };
+        switch (colDif) {
+            case -2:
+                return Direction.RIGHT;
+            case 2:
+                return Direction.LEFT;
+            default:
+                return null;
+        }
     }
 
     // INITIALIZATION Methods
@@ -120,7 +138,7 @@ public class Board extends GridLayout {
         // Fill with pegs
         for (int row = 0; row < 7; row++) {
             for (int col = 0; col < 7; col++) {
-                boardMatrix[row][col] = new Cell(col, row, 1);
+                boardMatrix[row][col] = new Cell(getContext(), col, row, 1);
             }
         }
 
@@ -137,7 +155,7 @@ public class Board extends GridLayout {
         // Fill with empty cells
         for (int row = 0; row < 7; row++) {
             for (int col = 0; col < 7; col++) {
-                boardMatrix[row][col] = new Cell(col, row, 0);
+                boardMatrix[row][col] = new Cell(getContext(), col, row, 0);
             }
         }
 
@@ -199,4 +217,4 @@ public class Board extends GridLayout {
         this.borders = borders;
     }
 }
-}
+
