@@ -1,25 +1,57 @@
 package com.example.senku;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
+import android.util.DisplayMetrics;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import androidx.core.content.ContextCompat;
+
 public class Cell extends FrameLayout {
-    private int colPos, rowPos, value;
+    private int colPos, rowPos, value, displayWidth, displayHeight;
     private ImageView cellSprite;
+
 
     public Cell (Context context, int colPos, int rowPos, int value) {
         super(context);
+        setDisplaySizes();
+
         this.colPos = colPos;
         this.rowPos = rowPos;
-        this.value = value;
-        setCellSprite();
+        this.cellSprite = new ImageView(context);
+        updateCell(value);
+        addComponentsToLayout();
     }
 
     // METHODS
     public void updateCell(int value) {
         setValue(value);
-        setCellSprite();
+        updateCellStyle();
+    }
+
+    public void addComponentsToLayout() {
+        this.cellSprite.setLayoutParams(createFrameLayoutParams());
+        this.addView(cellSprite);
+    }
+
+    public FrameLayout.LayoutParams createFrameLayoutParams() {
+        int cellMargin = displayWidth*3/100; // Cell margin amount equals to the 3% of the displayWidth
+        int cellSize = (displayWidth - cellMargin * 14) / 7; // Cell size equals to the displayWidth minus Cell Margin * 14 (because of left and right margins) divided by the amount of pegs (7)
+
+
+        FrameLayout.LayoutParams params = new LayoutParams(cellSize, cellSize);
+        params.setMargins(cellMargin, cellMargin, cellMargin, cellMargin);
+        return params;
+    }
+
+    public void setDisplaySizes() {
+        DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
+        displayWidth = displayMetrics.widthPixels;
+        displayHeight = displayMetrics.heightPixels;
     }
 
     // GETTERS and SETTERS
@@ -44,15 +76,20 @@ public class Cell extends FrameLayout {
     public ImageView getCellSprite() {
         return cellSprite;
     }
-    public void setCellSprite() {
-        this.cellSprite = new ImageView(getContext());
+
+    public void updateCellStyle() {
+        this.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorCellEmpty));
+
 
         if (this.getValue() == 1) {
-            this.cellSprite.setImageResource(R.drawable.sprite_cellPeg);
+            this.cellSprite.setImageResource(R.drawable.sprite_cellpeg);
+
+        } else if (this.getValue() == 0) {
+            this.cellSprite.setImageResource(R.drawable.sprite_cellnull);
         } else {
-            this.cellSprite.setImageResource(R.drawable.sprite_cellNull);
+            this.cellSprite.setVisibility(View.INVISIBLE);
+            this.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.alpha));
+
         }
-
-
     }
 }

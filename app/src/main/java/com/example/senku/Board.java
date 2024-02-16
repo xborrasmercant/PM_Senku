@@ -1,10 +1,14 @@
 package com.example.senku;
 
 import android.content.Context;
+import android.view.View;
 import android.widget.GridLayout;
+
+import androidx.core.content.ContextCompat;
 
 public class Board extends GridLayout {
     private Cell[][] boardMatrix;
+    private Cell selectedCell;
     private int[][] borders = new int[][]{ {0, 0}, {0, 1}, {1, 0}, {1, 1}, {0, 5}, {0, 6}, {1, 5}, {1, 6}, {5, 0}, {5, 1}, {6, 0}, {6, 1}, {5, 5}, {5, 6}, {6, 5}, {6, 6}}; // Cords to avoid checking borders of matrix
     public enum Direction { // Movement directions
         UP, DOWN, RIGHT, LEFT
@@ -78,29 +82,41 @@ public class Board extends GridLayout {
 
     // MOVEMENT Methods
     public void handleMovement(Cell selectedCell, Cell targetCell, Direction movementDirection) {
+        int midCellRow, midCellCol;
+
+        // Get mid cell positions
         switch (movementDirection) {
             case DOWN:
-                applyMovement(selectedCell, targetCell, selectedCell.getRowPos()+1, selectedCell.getColPos());
+                midCellRow = selectedCell.getRowPos()+1;
+                midCellCol = selectedCell.getColPos();
                 break;
             case UP:
-                applyMovement(selectedCell, targetCell, selectedCell.getRowPos()-1, selectedCell.getColPos());
+                midCellRow = selectedCell.getRowPos()-1;
+                midCellCol = selectedCell.getColPos();
                 break;
             case RIGHT:
-                applyMovement(selectedCell, targetCell, selectedCell.getRowPos(), selectedCell.getColPos()+1);
+                midCellRow = selectedCell.getRowPos();
+                midCellCol = selectedCell.getColPos()+1;
                 break;
             case LEFT:
-                applyMovement(selectedCell, targetCell, selectedCell.getRowPos(), selectedCell.getColPos()-1);
+                midCellRow = selectedCell.getRowPos();
+                midCellCol = selectedCell.getColPos()-1;
                 break;
-            // If there's a possibility of other cases or a default case, handle them appropriately:
             default:
-                // Handle any other cases or throw an exception as appropriate.
+                midCellRow = 0;
+                midCellCol = 0;
                 break;
+        }
+
+        // Handle movement
+        if (targetCell.getValue() == 0 && boardMatrix[midCellRow][midCellCol].getValue() == 1) {
+            applyMovement(selectedCell, targetCell, midCellRow, midCellCol);
         }
     }
     public void applyMovement(Cell selectedCell, Cell targetCell, int row, int col) {
-        selectedCell.setValue(0);
-        boardMatrix[row][col].setValue(0); // Empty cell between selected and target cells
-        targetCell.setValue(1);
+        selectedCell.updateCell(0);
+        boardMatrix[row][col].updateCell(0); // Empty cell between selected and target cells
+        targetCell.updateCell(1);
     }
     public Direction getDirection(Cell selectedCell, Cell targetCell) {
 
@@ -135,20 +151,46 @@ public class Board extends GridLayout {
 
     // INITIALIZATION Methods
     public void initBoard() {
+
         // Fill with pegs
         for (int row = 0; row < 7; row++) {
             for (int col = 0; col < 7; col++) {
-                boardMatrix[row][col] = new Cell(getContext(), col, row, 1);
+                Cell cell = new Cell(getContext(), col, row, 1);
+                boardMatrix[row][col] = cell;
+
+                cell.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        try {
+
+                            if (selectedCell != null) {
+                                handleMovement(selectedCell, cell, getDirection(selectedCell, cell));
+                                selectedCell.getCellSprite().clearColorFilter();
+                                selectedCell = null;
+
+                            } else {
+                                selectedCell = cell;
+                                cell.getCellSprite().setColorFilter(ContextCompat.getColor(getContext(), R.color.selected));
+                            }
+                        } catch (Exception e) {
+                            // Handle
+                        }
+
+                    }
+                });
+
+                GridLayout.LayoutParams params = createGridLayoutParams(row, col);
+                this.addView(boardMatrix[row][col], params); // Add to Layout
             }
         }
 
         // Define borders of boardMatrix
         for (int[] pos : borders) {
-            boardMatrix[pos[0]][pos[1]].setValue(-1);
+            boardMatrix[pos[0]][pos[1]].updateCell(-1);
         }
 
         // Set the empty position of the board (center)
-        boardMatrix[3][3].setValue(0);
+        boardMatrix[3][3].updateCell(0);
     }
     public void initTestingBoard() {
 
@@ -161,12 +203,21 @@ public class Board extends GridLayout {
 
         // Define borders of boardMatrix
         for (int[] pos : borders) {
-            boardMatrix[pos[0]][pos[1]].setValue(-1);
+            boardMatrix[pos[0]][pos[1]].updateCell(-1);
         }
 
         // Set two pegs for testing the game over method
-        boardMatrix[3][3].setValue(1);
-        boardMatrix[2][3].setValue(1);
+        boardMatrix[3][3].updateCell(1);
+        boardMatrix[2][3].updateCell(1);
+    }
+
+    public GridLayout.LayoutParams createGridLayoutParams(int row, int col) {
+
+        GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+        params.rowSpec = GridLayout.spec(row);
+        params.columnSpec = GridLayout.spec(col);
+
+        return params;
     }
 
     //TERMINAL Methods
