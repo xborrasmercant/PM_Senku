@@ -13,7 +13,7 @@ public class Cell extends FrameLayout {
         this.colPos = colPos;
         this.rowPos = rowPos;
         this.value = value;
-        this.cellSprite = new ImageView(getContext());
+        setCellSprite();
     }
 
     // METHODS
@@ -45,10 +45,14 @@ public class Cell extends FrameLayout {
         return cellSprite;
     }
     public void setCellSprite() {
-        switch (this.getValue()) {
-            case 1: {this.cellSprite.setImageResource(R.drawable.sprite_cellNull);}
-            default: {this.cellSprite.setImageResource(R.drawable.sprite_cellNull);}
+        this.cellSprite = new ImageView(getContext());
+
+        if (this.getValue() == 1) {
+            this.cellSprite.setImageResource(R.drawable.sprite_cellPeg);
+        } else {
+            this.cellSprite.setImageResource(R.drawable.sprite_cellNull);
         }
+
 
     }
 }
