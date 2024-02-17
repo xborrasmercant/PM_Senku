@@ -145,7 +145,6 @@ public class Board extends GridLayout {
 
     // INITIALIZATION Methods
     public void initBoard() {
-
         // Fill with pegs
         for (int row = 0; row < 7; row++) {
             for (int col = 0; col < 7; col++) {
@@ -162,6 +161,7 @@ public class Board extends GridLayout {
 
                                 if (dir != null) {
                                     handleMovement(selectedCell, cell, dir);
+                                    handleBoardStatus();
                                 }
 
                                 selectedCell.getCellSprite().clearColorFilter();
@@ -210,7 +210,6 @@ public class Board extends GridLayout {
         boardMatrix[3][3].updateCell(1);
         boardMatrix[2][3].updateCell(1);
     }
-
     public GridLayout.LayoutParams createGridLayoutParams(int row, int col) {
 
         GridLayout.LayoutParams params = new GridLayout.LayoutParams();
