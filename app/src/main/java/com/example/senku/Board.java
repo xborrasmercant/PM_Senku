@@ -119,31 +119,25 @@ public class Board extends GridLayout {
     }
     public Direction getDirection(Cell selectedCell, Cell targetCell) {
         // Check the difference result of selected and target pegs.
-        int dRow = selectedCell.getRowPos() - targetCell.getRowPos(), dCol = selectedCell.getColPos() - targetCell.getColPos();
+        int dRow = selectedCell.getRowPos() - targetCell.getRowPos(),
+            dCol = selectedCell.getColPos() - targetCell.getColPos();
 
+        // Check that target cell is in valid range.
         if (dRow > 2 || dRow < -2 || dCol > 2 || dCol < -2) {
             return null;
         }
 
         if (dCol == 0) { // Making sure that delta col is 0 to prevent diagonal movement
             switch (dRow) {
-                case -2:
-                    return Direction.DOWN;
-                case 2:
-                    return Direction.UP;
-                default:
-                    return null;
+                case -2: return Direction.DOWN;
+                case 2: return Direction.UP;
             }
         }
 
         if (dRow == 0) { // Making sure that delta row is 0 to prevent diagonal movement
             switch (dCol) {
-                case -2:
-                    return Direction.RIGHT;
-                case 2:
-                    return Direction.LEFT;
-                default:
-                    return null;
+                case -2: return Direction.RIGHT;
+                case 2: return Direction.LEFT;
             }
         }
         return null;
