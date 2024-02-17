@@ -58,7 +58,6 @@ public class Board extends GridLayout {
         return Status.GAMEOVER;
     }
     public boolean canMove(Cell cell) {
-
         if (insideBounds(cell.getRowPos()+1, cell.getColPos(), cell.getRowPos()+2, cell.getColPos())) { // Try down
             return true;
         } else if (insideBounds(cell.getRowPos(), cell.getColPos()+1, cell.getRowPos(), cell.getColPos()+2)) { // Try up
@@ -218,40 +217,6 @@ public class Board extends GridLayout {
         params.columnSpec = GridLayout.spec(col);
 
         return params;
-    }
-
-    //TERMINAL Methods
-    public void cleanTerminal(){
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-
-    }
-    public void printBoard() {
-        cleanTerminal();
-
-        for (Cell[] row : boardMatrix) {
-            for (Cell peg : row) {
-                if (peg.getValue() == -1) {
-                    System.out.print("  ");
-                } else {
-                    System.out.print(peg.getValue() + " ");
-                }
-            }
-            System.out.println();
-        }
-        System.out.println();
-
     }
 
     // GETTERS and SETTERS

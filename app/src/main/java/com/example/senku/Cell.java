@@ -39,7 +39,7 @@ public class Cell extends FrameLayout {
     }
 
     public FrameLayout.LayoutParams createFrameLayoutParams() {
-        int cellMargin = displayWidth*3/100; // Cell margin amount equals to the 3% of the displayWidth
+        int cellMargin = displayWidth*2/100; // Cell margin amount equals to the 3% of the displayWidth
         int cellSize = (displayWidth - cellMargin * 14) / 7; // Cell size equals to the displayWidth minus Cell Margin * 14 (because of left and right margins) divided by the amount of pegs (7)
 
 
