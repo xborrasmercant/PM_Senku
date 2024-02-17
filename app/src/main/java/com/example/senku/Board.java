@@ -118,17 +118,15 @@ public class Board extends GridLayout {
         targetCell.updateCell(1);
     }
     public Direction getDirection(Cell selectedCell, Cell targetCell) {
-
         // Check the difference result of selected and target pegs.
-        int rowDif = selectedCell.getRowPos() - targetCell.getRowPos(), colDif = selectedCell.getColPos() - targetCell.getColPos();
+        int dRow = selectedCell.getRowPos() - targetCell.getRowPos(), dCol = selectedCell.getColPos() - targetCell.getColPos();
 
-
-        if (rowDif > 2 || rowDif < -2 || colDif > 2 || colDif < -2) {
+        if (dRow > 2 || dRow < -2 || dCol > 2 || dCol < -2) {
             return null;
         }
 
-        if (colDif == 0) {
-            switch (rowDif) {
+        if (dCol == 0) { // Making sure that delta col is 0 to prevent diagonal movement
+            switch (dRow) {
                 case -2:
                     return Direction.DOWN;
                 case 2:
@@ -138,14 +136,17 @@ public class Board extends GridLayout {
             }
         }
 
-        switch (colDif) {
-            case -2:
-                return Direction.RIGHT;
-            case 2:
-                return Direction.LEFT;
-            default:
-                return null;
+        if (dRow == 0) { // Making sure that delta row is 0 to prevent diagonal movement
+            switch (dCol) {
+                case -2:
+                    return Direction.RIGHT;
+                case 2:
+                    return Direction.LEFT;
+                default:
+                    return null;
+            }
         }
+        return null;
     }
 
     // INITIALIZATION Methods
@@ -161,13 +162,19 @@ public class Board extends GridLayout {
                     @Override
                     public void onClick(View v) {
                         try {
-
+                            // If there is a selected cell -> Handle movement
                             if (selectedCell != null) {
-                                handleMovement(selectedCell, cell, getDirection(selectedCell, cell));
+                                Direction dir = getDirection(selectedCell, cell);
+
+                                if (dir != null) {
+                                    handleMovement(selectedCell, cell, dir);
+                                }
+
                                 selectedCell.getCellSprite().clearColorFilter();
                                 selectedCell = null;
-
-                            } else {
+                            }
+                            // If there isn't a selected cell -> Select cell
+                            else {
                                 selectedCell = cell;
                                 cell.getCellSprite().setColorFilter(ContextCompat.getColor(getContext(), R.color.selected));
                             }
