@@ -5,11 +5,15 @@
     <color name="colorAccent">#03DAC5</color>
     <color name="colorBackground">#FFFFFF</color>
     <color name="colorCellPeg">#FFC107</color>
-    <color name="colorCellEmpty">#BDBDBD</color>
     <color name="colorText">#000000</color>
     <color name="colorWin">#4CAF50</color>
     <color name="colorLose">#F44336</color>
     <color name="colorPlayable">#2196F3</color>
+
+
+    <color name="boardBackground">#D1D1D1</color>
+    <color name="defaultBackgroundText">#1C1C1C</color>
+    <color name="defaultText">#F1E7DA</color>
     <color name="alpha">#00FFFFFF</color>
     <color name="selected">#75000000</color>
 </resources>

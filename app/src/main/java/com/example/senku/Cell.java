@@ -78,7 +78,7 @@ public class Cell extends FrameLayout {
     }
 
     public void updateCellStyle() {
-        this.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorCellEmpty));
+        this.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.boardBackground));
 
 
         if (this.getValue() == 1) {

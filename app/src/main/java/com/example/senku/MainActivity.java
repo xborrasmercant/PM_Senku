@@ -6,6 +6,7 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -18,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
     ConstraintLayout.LayoutParams mainCLayoutParams;
     int displayWidth, displayHeight;
     Board board;
+    Timer timer;
 
 
 
@@ -34,10 +36,19 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void addComponentsToLayout() {
+        int timerSize = displayWidth*60/100;
 
-        board = new Board (getBaseContext());
+        // Add Timer
+        timer = new Timer(this, 50, ContextCompat.getColor(this, R.color.defaultText), ContextCompat.getColor(this, R.color.defaultBackgroundText));
+        timer.setId(View.generateViewId());
+        timer.setVisibility(View.VISIBLE);
+        mainConstraintLayout.addView(timer);
+        timer.startTimer();
+
+        // Add Board
+        board = new Board (this);
         board.setId(View.generateViewId());
-            mainConstraintLayout.addView(board);
+        mainConstraintLayout.addView(board);
 
         board.initBoard();
     }
@@ -48,12 +59,20 @@ public class MainActivity extends AppCompatActivity {
         int spacing = 32;
         int parentID = ConstraintSet.PARENT_ID;
         int boardID = board.getId();
+        int timerID = timer.getId();
 
         cs.clone(mainConstraintLayout); // Clone the constraints of mainConstraintLayout into ConstraintSet
 
+        // TIMER constraints
+        cs.connect(timerID, ConstraintSet.START, parentID, ConstraintSet.START, spacing);
+        cs.connect(timerID, ConstraintSet.END, parentID, ConstraintSet.END, spacing);
+        cs.connect(timerID, ConstraintSet.TOP, parentID, ConstraintSet.TOP, spacing);
+        cs.connect(timerID, ConstraintSet.BOTTOM, boardID, ConstraintSet.TOP, 0);
+
+        // BOARD constraints
         cs.connect(boardID, ConstraintSet.START, parentID, ConstraintSet.START, spacing);
         cs.connect(boardID, ConstraintSet.END, parentID, ConstraintSet.END, spacing);
-        cs.connect(boardID, ConstraintSet.TOP, parentID, ConstraintSet.TOP, spacing);
+        cs.connect(boardID, ConstraintSet.TOP, timerID, ConstraintSet.BOTTOM, 0);
         cs.connect(boardID, ConstraintSet.BOTTOM, parentID, ConstraintSet.BOTTOM, spacing);
 
         cs.applyTo(mainConstraintLayout);
