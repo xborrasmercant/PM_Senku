@@ -18,8 +18,8 @@ public class ScoreBox extends StylizedTextView{
     }
 
     public void setScoreValue(int scoreValue) {
-        this.scoreValue = scoreValue;
-        this.setText(String.valueOf(scoreValue));
+        this.scoreValue += scoreValue;
+        this.setText(String.valueOf(this.scoreValue));
 
     }
 }

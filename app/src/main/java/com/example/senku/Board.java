@@ -7,6 +7,7 @@ import android.widget.GridLayout;
 import androidx.core.content.ContextCompat;
 
 public class Board extends GridLayout {
+    private MoveListener moveListener;
     private Cell[][] boardMatrix;
     private Cell selectedCell;
     private int[][] borders = new int[][]{ {0, 0}, {0, 1}, {1, 0}, {1, 1}, {0, 5}, {0, 6}, {1, 5}, {1, 6}, {5, 0}, {5, 1}, {6, 0}, {6, 1}, {5, 5}, {5, 6}, {6, 5}, {6, 6}}; // Cords to avoid checking borders of matrix
@@ -58,13 +59,13 @@ public class Board extends GridLayout {
         return Status.GAMEOVER;
     }
     public boolean canMove(Cell cell) {
-        if (insideBounds(cell.getRowPos()+1, cell.getColPos(), cell.getRowPos()+2, cell.getColPos())) { // Try down
+        if (insideBounds(cell.getRowPos()+1, cell.getColPos(), cell.getRowPos()+2, cell.getColPos()) && boardMatrix[cell.getRowPos()+2][cell.getColPos()].getValue() == 0) { // Try down
             return true;
-        } else if (insideBounds(cell.getRowPos(), cell.getColPos()+1, cell.getRowPos(), cell.getColPos()+2)) { // Try up
+        } else if (insideBounds(cell.getRowPos(), cell.getColPos()+1, cell.getRowPos(), cell.getColPos()+2) && boardMatrix[cell.getRowPos()][cell.getColPos()+2].getValue() == 0) { // Try up
             return true;
-        } else if (insideBounds(cell.getRowPos()-1, cell.getColPos(), cell.getRowPos()-2, cell.getColPos())) { // Try left
+        } else if (insideBounds(cell.getRowPos()-1, cell.getColPos(), cell.getRowPos()-2, cell.getColPos()) && boardMatrix[cell.getRowPos()-2][cell.getColPos()].getValue() == 0) { // Try left
             return true;
-        } else if (insideBounds(cell.getRowPos(), cell.getColPos()-1, cell.getRowPos(), cell.getColPos()-2)) { // Try right
+        } else if (insideBounds(cell.getRowPos(), cell.getColPos()-1, cell.getRowPos(), cell.getColPos()-2) && boardMatrix[cell.getRowPos()][cell.getColPos()-2].getValue() == 0) { // Try right
             return true;
         }
 
@@ -116,6 +117,11 @@ public class Board extends GridLayout {
         selectedCell.updateCell(0);
         boardMatrix[row][col].updateCell(0); // Empty cell between selected and target cells
         targetCell.updateCell(1);
+
+        // Call onMoveMade() to increment score
+        if (moveListener != null) {
+            moveListener.onMoveMade();
+        }
     }
     public Direction getDirection(Cell selectedCell, Cell targetCell) {
         // Check the difference result of selected and target pegs.
@@ -219,7 +225,12 @@ public class Board extends GridLayout {
         return params;
     }
 
+
     // GETTERS and SETTERS
+    public void setMoveListener(MoveListener listener) {
+        this.moveListener = listener;
+    }
+
     public Cell[][] getBoardMatrix() {
         return boardMatrix;
     }

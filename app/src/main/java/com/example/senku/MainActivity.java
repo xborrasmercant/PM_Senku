@@ -14,7 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MoveListener{
     private ConstraintLayout mainConstraintLayout;
     private ConstraintLayout.LayoutParams mainCLayoutParams;
     private int displayWidth, displayHeight;
@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
         configureConstraints();
     }
 
-
     private void addComponentsToLayout() {
         // Add Timer
         timer = new Timer(this, 50, ContextCompat.getColor(this, R.color.defaultText), ContextCompat.getColor(this, R.color.defaultBackgroundText));
@@ -46,11 +45,13 @@ public class MainActivity extends AppCompatActivity {
         scoreBox = new ScoreBox(this, 50, ContextCompat.getColor(this, R.color.defaultText), ContextCompat.getColor(this, R.color.defaultBackgroundText), 0);
         scoreBox.setId(View.generateViewId());
         mainConstraintLayout.addView(scoreBox);
-        
+        extendViewWidth(scoreBox);
+
         // Add Board
         board = new Board (this);
         board.setId(View.generateViewId());
         mainConstraintLayout.addView(board);
+        board.setMoveListener(this);
         board.initBoard();
     }
 
@@ -69,21 +70,27 @@ public class MainActivity extends AppCompatActivity {
         cs.connect(timerID, ConstraintSet.START, parentID, ConstraintSet.START, spacing);
         cs.connect(timerID, ConstraintSet.END, scoreBoxID, ConstraintSet.START, spacing);
         cs.connect(timerID, ConstraintSet.TOP, parentID, ConstraintSet.TOP, spacing);
-        cs.connect(timerID, ConstraintSet.BOTTOM, boardID, ConstraintSet.TOP, spacing);
 
         // SCOREBOX constraints
         cs.connect(scoreBoxID, ConstraintSet.START, timerID, ConstraintSet.END, spacing);
         cs.connect(scoreBoxID, ConstraintSet.END, parentID, ConstraintSet.END, spacing);
         cs.connect(scoreBoxID, ConstraintSet.TOP, parentID, ConstraintSet.TOP, spacing);
-        cs.connect(scoreBoxID, ConstraintSet.BOTTOM, boardID, ConstraintSet.TOP, spacing);
 
         // BOARD constraints
         cs.connect(boardID, ConstraintSet.START, parentID, ConstraintSet.START, spacing);
         cs.connect(boardID, ConstraintSet.END, parentID, ConstraintSet.END, spacing);
-        //cs.connect(boardID, ConstraintSet.TOP, timerID, ConstraintSet.BOTTOM, spacing);
+        cs.connect(boardID, ConstraintSet.TOP, timerID, ConstraintSet.BOTTOM, spacing);
+        cs.connect(boardID, ConstraintSet.TOP, scoreBoxID, ConstraintSet.BOTTOM, spacing);
         cs.connect(boardID, ConstraintSet.BOTTOM, parentID, ConstraintSet.BOTTOM, spacing);
 
         cs.applyTo(mainConstraintLayout);
+    }
+
+    private void extendViewWidth(View view) {
+        ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(
+                ConstraintLayout.LayoutParams.MATCH_CONSTRAINT,
+                ConstraintLayout.LayoutParams.WRAP_CONTENT);
+        view.setLayoutParams(layoutParams);
     }
 
     public void saveDisplaySize(){
@@ -92,5 +99,10 @@ public class MainActivity extends AppCompatActivity {
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         displayWidth = displayMetrics.widthPixels;
         displayHeight = displayMetrics.heightPixels;
+    }
+
+    @Override
+    public void onMoveMade() {
+        scoreBox.setScoreValue(25);
     }
 }
