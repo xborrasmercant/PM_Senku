@@ -15,12 +15,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
-    ConstraintLayout mainConstraintLayout;
-    ConstraintLayout.LayoutParams mainCLayoutParams;
-    int displayWidth, displayHeight;
-    Board board;
-    Timer timer;
-
+    private ConstraintLayout mainConstraintLayout;
+    private ConstraintLayout.LayoutParams mainCLayoutParams;
+    private int displayWidth, displayHeight;
+    private Board board;
+    private Timer timer;
+    private ScoreBox scoreBox;
 
 
     @Override
@@ -36,20 +36,21 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void addComponentsToLayout() {
-        int timerSize = displayWidth*60/100;
-
         // Add Timer
         timer = new Timer(this, 50, ContextCompat.getColor(this, R.color.defaultText), ContextCompat.getColor(this, R.color.defaultBackgroundText));
         timer.setId(View.generateViewId());
-        timer.setVisibility(View.VISIBLE);
         mainConstraintLayout.addView(timer);
         timer.startTimer();
 
+        // Add Scorebox
+        scoreBox = new ScoreBox(this, 50, ContextCompat.getColor(this, R.color.defaultText), ContextCompat.getColor(this, R.color.defaultBackgroundText), 0);
+        scoreBox.setId(View.generateViewId());
+        mainConstraintLayout.addView(scoreBox);
+        
         // Add Board
         board = new Board (this);
         board.setId(View.generateViewId());
         mainConstraintLayout.addView(board);
-
         board.initBoard();
     }
 
@@ -60,19 +61,26 @@ public class MainActivity extends AppCompatActivity {
         int parentID = ConstraintSet.PARENT_ID;
         int boardID = board.getId();
         int timerID = timer.getId();
+        int scoreBoxID = scoreBox.getId();
 
         cs.clone(mainConstraintLayout); // Clone the constraints of mainConstraintLayout into ConstraintSet
 
         // TIMER constraints
         cs.connect(timerID, ConstraintSet.START, parentID, ConstraintSet.START, spacing);
-        cs.connect(timerID, ConstraintSet.END, parentID, ConstraintSet.END, spacing);
+        cs.connect(timerID, ConstraintSet.END, scoreBoxID, ConstraintSet.START, spacing);
         cs.connect(timerID, ConstraintSet.TOP, parentID, ConstraintSet.TOP, spacing);
-        cs.connect(timerID, ConstraintSet.BOTTOM, boardID, ConstraintSet.TOP, 0);
+        cs.connect(timerID, ConstraintSet.BOTTOM, boardID, ConstraintSet.TOP, spacing);
+
+        // SCOREBOX constraints
+        cs.connect(scoreBoxID, ConstraintSet.START, timerID, ConstraintSet.END, spacing);
+        cs.connect(scoreBoxID, ConstraintSet.END, parentID, ConstraintSet.END, spacing);
+        cs.connect(scoreBoxID, ConstraintSet.TOP, parentID, ConstraintSet.TOP, spacing);
+        cs.connect(scoreBoxID, ConstraintSet.BOTTOM, boardID, ConstraintSet.TOP, spacing);
 
         // BOARD constraints
         cs.connect(boardID, ConstraintSet.START, parentID, ConstraintSet.START, spacing);
         cs.connect(boardID, ConstraintSet.END, parentID, ConstraintSet.END, spacing);
-        cs.connect(boardID, ConstraintSet.TOP, timerID, ConstraintSet.BOTTOM, 0);
+        //cs.connect(boardID, ConstraintSet.TOP, timerID, ConstraintSet.BOTTOM, spacing);
         cs.connect(boardID, ConstraintSet.BOTTOM, parentID, ConstraintSet.BOTTOM, spacing);
 
         cs.applyTo(mainConstraintLayout);
