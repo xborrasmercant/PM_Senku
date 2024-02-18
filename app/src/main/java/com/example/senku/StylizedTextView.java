@@ -7,7 +7,7 @@ public class StylizedTextView extends androidx.appcompat.widget.AppCompatTextVie
 
     public StylizedTextView(Context context, String textString, float textSize, int textColor, int textBackgroundColor) {
         super(context);
-        int paddingAmount = 15;
+        int paddingAmount = 25;
 
         setText(textString);
         setTextSize(textSize);

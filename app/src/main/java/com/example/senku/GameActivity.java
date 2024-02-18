@@ -101,6 +101,6 @@ public class GameActivity extends AppCompatActivity implements MoveListener {
 
     @Override
     public void onMoveMade() {
-        scoreBox.setScoreValue(25); // This is just an example
+        scoreBox.setScoreValue(25);
     }
 }

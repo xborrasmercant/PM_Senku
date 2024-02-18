@@ -1,6 +1,7 @@
 package com.example.senku;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.GridLayout;
 
@@ -30,12 +31,12 @@ public class Board extends GridLayout {
     public void handleBoardStatus() {
         switch (this.getBoardStatus()) {
             case WIN: {
-                // TODO: Handle win
-                System.exit(0);
+                GameEndPopup gameEndPopup = new GameEndPopup(this.getContext(), "YOU WON!");
+                gameEndPopup.showAtLocation(this, Gravity.CENTER, 0, 0);
             }
             case GAMEOVER: {
-                // TODO: Handle game over
-                System.exit(0);
+                GameEndPopup gameEndPopup = new GameEndPopup(this.getContext(), "GAME OVER");
+                gameEndPopup.showAtLocation(this, Gravity.CENTER, 0, 0);
             }
             case PLAYABLE: {
                 return;
