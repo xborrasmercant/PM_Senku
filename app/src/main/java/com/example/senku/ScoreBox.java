@@ -1,6 +1,7 @@
 package com.example.senku;
 
 import android.content.Context;
+import android.graphics.Typeface;
 
 public class ScoreBox extends StylizedTextView{
     private int scoreValue;
@@ -9,6 +10,7 @@ public class ScoreBox extends StylizedTextView{
     public ScoreBox(Context context, float textSize, int textColor, int textBackgroundColor, int scoreValue) {
         super(context, String.valueOf(scoreValue), textSize, textColor, textBackgroundColor);
         this.scoreValue = scoreValue;
+        setTypeface(Typeface.DEFAULT_BOLD);
     }
 
     public int getScoreValue() {

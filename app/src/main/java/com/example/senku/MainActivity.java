@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
         mainConstraintLayout = findViewById(R.id.mainConstraintLayout);
         addComponentsToLayout();
+        styleActivity();
     }
 
     private void addComponentsToLayout() {
@@ -102,6 +103,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         cs.applyTo(mainConstraintLayout);
+    }
+
+    private void styleActivity() {
+        mainConstraintLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.mainBackground));
     }
 
     private void extendViewWidth(View view) {

@@ -24,7 +24,7 @@ public class GameActivity extends AppCompatActivity implements MoveListener {
 
         saveDisplaySize();
         addComponentsToLayout();
-        configureConstraints();
+        styleActivity();
     }
 
     private void addComponentsToLayout() {
@@ -46,6 +46,8 @@ public class GameActivity extends AppCompatActivity implements MoveListener {
         gameConstraintLayout.addView(board);
         board.setMoveListener(this);
         board.initBoard();
+
+        configureConstraints();
     }
 
     private void configureConstraints() {
@@ -91,6 +93,10 @@ public class GameActivity extends AppCompatActivity implements MoveListener {
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         displayWidth = displayMetrics.widthPixels;
         displayHeight = displayMetrics.heightPixels;
+    }
+
+    private void styleActivity() {
+        gameConstraintLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.mainBackground));
     }
 
     @Override

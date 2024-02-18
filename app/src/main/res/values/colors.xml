@@ -14,6 +14,7 @@
     <color name="boardBackground">#D1D1D1</color>
     <color name="defaultBackgroundText">#1C1C1C</color>
     <color name="defaultText">#F1E7DA</color>
+    <color name="mainBackground">#AAA6A5</color>
     <color name="alpha">#00FFFFFF</color>
     <color name="selected">#75000000</color>
 </resources>

@@ -1,6 +1,7 @@
 package com.example.senku;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.Looper;
 
@@ -11,6 +12,8 @@ public class Timer extends StylizedTextView {
 
     public Timer(Context context, float textSize, int textColor, int textBackgroundColor) {
         super(context, String.format("%02d:%02d", 0, 0), textSize, textColor, textBackgroundColor);
+
+        setTypeface(Typeface.DEFAULT_BOLD);
     }
 
     public void startTimer() {
