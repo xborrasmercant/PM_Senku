@@ -5,10 +5,11 @@ import android.graphics.Typeface;
 
 public class StylizedTextView extends androidx.appcompat.widget.AppCompatTextView {
 
-    public StylizedTextView(Context context, float textSize, int textColor, int textBackgroundColor) {
+    public StylizedTextView(Context context, String textString, float textSize, int textColor, int textBackgroundColor) {
         super(context);
         int paddingAmount = 15;
 
+        setText(textString);
         setTextSize(textSize);
         setTextColor(textColor);
         setBackgroundColor(textBackgroundColor);

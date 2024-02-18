@@ -10,9 +10,7 @@ public class Timer extends StylizedTextView {
     private int m = 0, s = 0;
 
     public Timer(Context context, float textSize, int textColor, int textBackgroundColor) {
-        super(context, textSize, textColor, textBackgroundColor);
-        // Initialize with 00:00 format
-        this.setText(String.format("%02d:%02d", m, s));
+        super(context, String.format("%02d:%02d", 0, 0), textSize, textColor, textBackgroundColor);
     }
 
     public void startTimer() {

@@ -7,10 +7,8 @@ public class ScoreBox extends StylizedTextView{
 
 
     public ScoreBox(Context context, float textSize, int textColor, int textBackgroundColor, int scoreValue) {
-        super(context, textSize, textColor, textBackgroundColor);
+        super(context, String.valueOf(scoreValue), textSize, textColor, textBackgroundColor);
         this.scoreValue = scoreValue;
-        this.setText(String.valueOf(scoreValue));
-
     }
 
     public int getScoreValue() {
